@@ -1,9 +1,7 @@
-import Document from "@/components/document";
-
 const Home = () => {
   return (
-    <main className="relative w-full h-screen flex justify-center items-center bg-gray-100">
-      <Document />
+    <main className="relative w-full h-screen flex justify-center items-center bg-[#F1F1F1]">
+      <h2 className="text-2xl font-medium">Hello World</h2>
     </main>
   );
 };

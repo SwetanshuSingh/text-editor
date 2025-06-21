@@ -75,7 +75,7 @@ const Document = () => {
   }, []);
 
   return (
-    <section className="w-[600px] h-[90vh] font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-col gap-5 px-10 py-16">
+    <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-col gap-5 px-10 py-16">
       <span className="leading-6 text-black/70">
         <h3 className="font-semibold text-black mb-2">Machine Learning</h3>
         <p className="">
