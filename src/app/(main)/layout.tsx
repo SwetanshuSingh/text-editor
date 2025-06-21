@@ -1,5 +1,4 @@
 import Sidebar from "@/components/sidebar";
-import { ViewTransitions } from "next-view-transitions";
 import { ReactNode } from "react";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
