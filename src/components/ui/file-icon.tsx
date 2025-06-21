@@ -12,7 +12,7 @@ const FileIcon = () => {
       height="20"
       viewBox="0 0 24 24"
       className={`cursor-pointer transition-colors duration-150 ${
-        pathName == "/editor"
+        pathName?.startsWith("/editor")
           ? "text-black"
           : "text-[#8C8C8C] hover:text-black/80"
       }`}
