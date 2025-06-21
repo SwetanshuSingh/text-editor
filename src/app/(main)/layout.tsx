@@ -1,7 +1,8 @@
 import Sidebar from "@/components/sidebar";
+import { ViewTransitions } from "next-view-transitions";
 import { ReactNode } from "react";
 
-const DocumentEditorLayout = ({ children }: { children: ReactNode }) => {
+const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="w-full max-h-screen h-screen flex justify-start bg-[#F5F5F5]">
       <Sidebar />
@@ -10,4 +11,4 @@ const DocumentEditorLayout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default DocumentEditorLayout;
+export default MainLayout;

@@ -1,11 +1,21 @@
-export const FileIcon = () => {
+"use client";
+
+import { usePathname } from "next/navigation";
+
+const FileIcon = () => {
+  const pathName = usePathname();
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
       viewBox="0 0 24 24"
-      className="text-[#5d5d5d] cursor-pointer hover:text-black/80 transition-colors duration-150"
+      className={`cursor-pointer transition-colors duration-150 ${
+        pathName == "/editor"
+          ? "text-black"
+          : "text-[#8C8C8C] hover:text-black/80"
+      }`}
     >
       <g
         fill="none"
@@ -21,3 +31,5 @@ export const FileIcon = () => {
     </svg>
   );
 };
+
+export default FileIcon;

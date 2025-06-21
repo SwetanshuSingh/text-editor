@@ -12,9 +12,9 @@ const UserIcon = () => {
       height="20"
       viewBox="0 0 48 48"
       className={`cursor-pointer transition-colors duration-150 ${
-        pathName == "/editor"
+        pathName == "/profile"
           ? "text-black"
-          : "text-[#5d5d5d] hover:text-black/80"
+          : "text-[#8C8C8C] hover:text-black/80"
       }`}
     >
       <g
