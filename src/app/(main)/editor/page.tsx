@@ -1,12 +1,6 @@
 import Link from "next/link";
 
 const DocumentEditor = async () => {
-  const sleep = (ms: number) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
-
-  await sleep(1000);
-
   return (
     <main className="w-full h-full bg-[#F8F8F8] p-5 flex flex-col gap-5 rounded-md outline outline-[#E4E4E4]">
       <div className="w-full flex justify-between items-center">

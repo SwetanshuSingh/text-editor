@@ -1,10 +1,14 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import ColorPicker from "./color-picker";
 
-const Document = () => {
+type DocPageProps = {
+  currentPage: Page;
+};
+
+const DocPage = ({ currentPage }: DocPageProps) => {
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
   const [popoverPosition, setPopoverPosition] = useState<{
     top: number;
@@ -75,34 +79,10 @@ const Document = () => {
   }, []);
 
   return (
-    <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-col gap-5 px-10 py-16">
+    <section className="doc-page max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-col gap-5 px-10 py-16">
       <span className="leading-6 text-black/70">
-        <h3 className="font-semibold text-black mb-2">Machine Learning</h3>
-        <p className="">
-          Software is deterministic. Given some input, if you run the program
-          again, you will get the same output. A developer has explicitly
-          written code to handle each case.
-        </p>
-        <p>
-          Most AI models¹ are not this way — they are probabilistic. Developers
-          don't have to explicitly program the instructions.
-        </p>
-      </span>
-
-      <span className="leading-6 text-black/70">
-        <h3 className="font-semibold text-black mb-2">Neural Networks</h3>
-        <p className="">
-          AI models are built on neural networks — think of them as a giant web
-          of decision-making pathways that learn from examples. Neural networks
-          can be used for anything, but I'll focus on language models.
-        </p>
-        <p>
-          A big takeaway for me is: it's just math. You can build a neural
-          network from first principles using linear algebra, calculus, and
-          statistics. You likely won't do this when there's helpful abstractions
-          like PyTorch, but it's helpful for me to demystify what is happening
-          under the hood.
-        </p>
+        <h3 className="font-semibold text-black mb-2">{currentPage.title}</h3>
+        <p className="">{currentPage.content}</p>
       </span>
 
       <AnimatePresence>
@@ -118,4 +98,4 @@ const Document = () => {
   );
 };
 
-export default Document;
+export default DocPage;
