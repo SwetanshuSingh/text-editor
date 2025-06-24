@@ -1,4 +1,11 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -58,4 +65,22 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updated_at").$defaultFn(
     () => /* @__PURE__ */ new Date()
   ),
+});
+
+export const document = pgTable("document", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  pageCount: integer("page_count").default(1),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+});
+
+export const page = pgTable("page", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  idx: integer("idx").notNull(),
+  content: text("content"),
+  documentId: uuid("document_id")
+    .notNull()
+    .references(() => document.id, { onDelete: "cascade" }),
 });
