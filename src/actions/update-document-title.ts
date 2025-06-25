@@ -1,19 +1,13 @@
-"use server";
-
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { document } from "@/lib/schema";
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
-export const createDocument = async (title: string) => {
-  // TODO: Add validation with zod.
+export const updateDocumentTitle = async (id: string, title: string) => {
+  if (id.trim() === "") return {};
 
-  if (title.trim() === "")
-    return {
-      status: "error",
-      type: "validation",
-      message: "Please provide an valid title",
-    };
+  if (title.trim() === "") return {};
 
   const session = await auth.api.getSession({ headers: headers() });
 
@@ -26,8 +20,9 @@ export const createDocument = async (title: string) => {
 
   const userId = session.user.id;
 
-  // const [newDoc] = await db
-  //   .insert(document)
-  //   .values({ title, userId })
-  //   .returning();
+  const isExistingDoc = await db.query.document.findFirst({
+    where: eq(document.id, id),
+  });
+
+  // If document does not exists
 };

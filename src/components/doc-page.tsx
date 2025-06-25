@@ -1,17 +1,49 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ColorPicker from "./color-picker";
+import { getDocumentById } from "@/actions/get-document-by-id";
 
-type DocPageProps = {};
+type PageData = {
+  id: string;
+  title: string;
+  summary: string;
+  content: string;
+  existingDoc: boolean;
+};
 
-const DocPage = ({}: DocPageProps) => {
+type DocPageProps = {
+  id: string;
+};
+
+const DocPage = ({ id }: DocPageProps) => {
+  const [pageData, setPageData] = useState<PageData>({
+    id,
+    title: "",
+    content: "",
+    summary: "",
+    existingDoc: false,
+  });
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
   const [popoverPosition, setPopoverPosition] = useState<{
     top: number;
     left: number;
   } | null>(null);
+
+  const handleTitleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    setPageData((pageData) => {
+      return { ...pageData, title: evt.target.value };
+    });
+
+    if(pageData.existingDoc) {
+      // TODO: If doc exists only update the title
+      return;
+    }
+
+    // TODO: If doc does not exists, create a new doc with new title.
+
+  };
 
   const getSelectionRange = () => {
     const currentSelection = window.getSelection();
@@ -76,16 +108,38 @@ const DocPage = ({}: DocPageProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    const getDocData = async () => {
+      const response = await getDocumentById(id);
+
+      if (response.status === "error") {
+        // TODO: handle error state here
+      }
+
+      if (!response.data) return;
+
+      const { id: docId, title, summary, content } = response.data;
+
+      setPageData({ id: docId, title, summary, content, existingDoc: true });
+    };
+
+    getDocData();
+  }, []);
+
+  console.log("Document Data", pageData);
+
   return (
-    <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-grow flex-col gap-8 px-10 py-16">
+    <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-grow flex-col gap-8 p-10">
       <input
         id="title"
         type="text"
+        value={pageData.title}
+        onChange={(evt) => handleTitleChange(evt)}
         placeholder="What are you writing about?"
         className="min-h-12 h-12 outline-none font-semibold text-3xl text-black tracking-wide placeholder:font-geist placeholder:tracking-tight placeholder:text-gray-300"
       />
       <div
-        className="h-full flex-grow resize-none outline-none text-2xl font-semibold text-gray-800"
+        className="h-full flex-grow resize-none outline-none text-2xl font-semibold text-gray-800 bg-gray-100"
         id="content"
         contentEditable
       ></div>

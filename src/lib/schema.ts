@@ -70,8 +70,8 @@ export const verification = pgTable("verification", {
 export const document = pgTable("document", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  summary: text("summary"),
-  content: text("text"),
+  summary: text("summary").notNull(),
+  content: text("text").notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
