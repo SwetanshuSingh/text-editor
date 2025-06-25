@@ -4,11 +4,9 @@ import { AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import ColorPicker from "./color-picker";
 
-type DocPageProps = {
-  currentPage: Page;
-};
+type DocPageProps = {};
 
-const DocPage = ({ currentPage }: DocPageProps) => {
+const DocPage = ({}: DocPageProps) => {
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
   const [popoverPosition, setPopoverPosition] = useState<{
     top: number;
@@ -79,11 +77,18 @@ const DocPage = ({ currentPage }: DocPageProps) => {
   }, []);
 
   return (
-    <section className="doc-page max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-col gap-5 px-10 py-16">
-      <span className="leading-6 text-black/70">
-        <h3 className="font-semibold text-black mb-2">{currentPage.title}</h3>
-        <p className="">{currentPage.content}</p>
-      </span>
+    <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-grow flex-col gap-8 px-10 py-16">
+      <input
+        id="title"
+        type="text"
+        placeholder="What are you writing about?"
+        className="min-h-12 h-12 outline-none font-semibold text-3xl text-black tracking-wide placeholder:font-geist placeholder:tracking-tight placeholder:text-gray-300"
+      />
+      <div
+        className="h-full flex-grow resize-none outline-none text-2xl font-semibold text-gray-800"
+        id="content"
+        contentEditable
+      ></div>
 
       <AnimatePresence>
         {popoverPosition && (

@@ -1,13 +1,24 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-const DocumentEditor = async () => {
+const DocsPage = async () => {
+  const createNewDoc = async () => {
+    "use server";
+    const uuid = crypto.randomUUID();
+    redirect(`${process.env.BETTER_AUTH_URL as string}/editor/${uuid}`);
+  };
+
   return (
     <main className="w-full h-full bg-[#F8F8F8] p-5 flex flex-col gap-5 rounded-md outline outline-[#E4E4E4]">
-      <div className="w-full flex justify-between items-center">
-        {/* <input
-          placeholder="search your documents"
-          className="w-64 bg-white flex justify-center items-center rounded-2xl px-4 py-1.5 text-sm outline-none placeholder:text-[#8C8C8C] placeholder:text-sm placeholder:font-semibold"
-        /> */}
+      <div className="w-full flex justify-end items-center">
+        <form action={createNewDoc}>
+          <button
+            type="submit"
+            className="text-sm font-medium border border-gray-300 px-4 py-2 rounded-3xl hover:bg-gray-300 transition-colors duration-150"
+          >
+            add
+          </button>
+        </form>
       </div>
 
       <div className="flex justify-start items-center gap-5">
@@ -26,4 +37,4 @@ const DocumentEditor = async () => {
   );
 };
 
-export default DocumentEditor;
+export default DocsPage;

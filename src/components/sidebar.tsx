@@ -10,7 +10,7 @@ const Sidebar = () => {
       <Link href="/profile">
         <UserIcon />
       </Link>
-      <Link href="/editor">
+      <Link href="/docs">
         <FileIcon />
       </Link>
     </aside>

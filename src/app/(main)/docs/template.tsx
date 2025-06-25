@@ -2,8 +2,8 @@
 
 import AnimatedPageWrapper from "@/components/animated-page-wrapper";
 
-const EditorTemplate = ({ children }: { children: React.ReactNode }) => {
+const DocsTemplate = ({ children }: { children: React.ReactNode }) => {
   return <AnimatedPageWrapper>{children}</AnimatedPageWrapper>;
 };
 
-export default EditorTemplate;
+export default DocsTemplate;
