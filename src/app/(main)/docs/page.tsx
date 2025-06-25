@@ -8,6 +8,7 @@ const DocsPage = async () => {
     redirect(`${process.env.BETTER_AUTH_URL as string}/editor/${uuid}`);
   };
 
+  
   return (
     <main className="w-full h-full bg-[#F8F8F8] p-5 flex flex-col gap-5 rounded-md outline outline-[#E4E4E4]">
       <div className="w-full flex justify-end items-center">

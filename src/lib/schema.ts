@@ -70,17 +70,9 @@ export const verification = pgTable("verification", {
 export const document = pgTable("document", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  pageCount: integer("page_count").default(1),
+  summary: text("summary"),
+  content: text("text"),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-});
-
-export const page = pgTable("page", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  idx: integer("idx").notNull(),
-  content: text("content"),
-  documentId: uuid("document_id")
-    .notNull()
-    .references(() => document.id, { onDelete: "cascade" }),
 });
