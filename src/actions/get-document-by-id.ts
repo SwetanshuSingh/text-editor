@@ -1,5 +1,7 @@
 "use server";
 
+"use server"
+
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { document, user } from "@/lib/schema";

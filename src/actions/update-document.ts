@@ -1,35 +1,32 @@
-"use server";
+"use server"
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { document } from "@/lib/schema";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
-interface CreateDocumentResponse extends ServerActionResponse {
+interface UpdateDocumentResponse extends ServerActionResponse {
   data?: typeof document.$inferSelect;
 }
 
-export const createDocumentWithTitle = async (
+export const updateDocumentTitle = async (
   id: string,
   title: string
-): Promise<CreateDocumentResponse> => {
-  // TODO: Add validation with zod.
-
-  if (id.trim() === "") {
+): Promise<UpdateDocumentResponse> => {
+  if (id.trim() === "")
     return {
       status: "error",
       type: "validation",
-      message: "Please provide an valid id",
+      message: "Please provide a valid id",
     };
-  }
 
-  if (title.trim() === "") {
+  if (title.trim() === "")
     return {
       status: "error",
       type: "validation",
-      message: "Please provide an valid title",
+      message: "Please provide a valid title",
     };
-  }
 
   const session = await auth.api.getSession({ headers: headers() });
 
@@ -43,43 +40,36 @@ export const createDocumentWithTitle = async (
   const userId = session.user.id;
 
   const data = await db
-    .insert(document)
-    .values({
-      id,
-      title,
-      summary: "",
-      content: "",
-      userId,
-    })
+    .update(document)
+    .set({ title })
+    .where(and(eq(document.id, id), eq(document.userId, userId)))
     .returning();
 
   return {
     status: "success",
     type: "mutation",
-    message: "Successfully created new document with title",
+    message: "Successfully updated document title",
     data: data[0],
   };
 };
 
-export const createDocumentWithContent = async (
+export const updateDocumentContent = async (
   id: string,
   content: string
-): Promise<CreateDocumentResponse> => {
-  if (id.trim() === "") {
+): Promise<UpdateDocumentResponse> => {
+  if (id.trim() === "")
     return {
       status: "error",
       type: "validation",
-      message: "Please provide an valid id",
+      message: "Please provide a valid id",
     };
-  }
 
-  if (content.trim() === "") {
+  if (content.trim() === "")
     return {
       status: "error",
       type: "validation",
-      message: "Please provide an valid content body",
+      message: "Please provide a valid content body",
     };
-  }
 
   const session = await auth.api.getSession({ headers: headers() });
 
@@ -93,20 +83,15 @@ export const createDocumentWithContent = async (
   const userId = session.user.id;
 
   const data = await db
-    .insert(document)
-    .values({
-      id,
-      title: "",
-      summary: "",
-      content: "",
-      userId,
-    })
+    .update(document)
+    .set({ content })
+    .where(and(eq(document.id, id), eq(document.userId, userId)))
     .returning();
 
   return {
     status: "success",
     type: "mutation",
-    message: "Succesfully created document with content",
+    message: "Successfully updated document content",
     data: data[0],
   };
 };

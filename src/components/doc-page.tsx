@@ -4,6 +4,8 @@ import { AnimatePresence } from "motion/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import ColorPicker from "./color-picker";
 import { getDocumentById } from "@/actions/get-document-by-id";
+import { updateDocumentTitle } from "@/actions/update-document";
+import { createDocumentWithTitle } from "@/actions/create-document";
 
 type PageData = {
   id: string;
@@ -31,18 +33,38 @@ const DocPage = ({ id }: DocPageProps) => {
     left: number;
   } | null>(null);
 
-  const handleTitleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = async (evt: ChangeEvent<HTMLInputElement>) => {
     setPageData((pageData) => {
       return { ...pageData, title: evt.target.value };
     });
 
-    if(pageData.existingDoc) {
-      // TODO: If doc exists only update the title
+    if (pageData.existingDoc) {
+      const response = await updateDocumentTitle(pageData.id, pageData.title);
+
+      if (response.status === "error" || !response.data) {
+        // TODO: handle error state here.
+        console.log("An error occured while updating the document title");
+        return;
+      }
+
+      const { id, title, summary, content } = response.data;
+
+      setPageData({ id, title, summary, content, existingDoc: true });
       return;
     }
 
-    // TODO: If doc does not exists, create a new doc with new title.
+    const response = await createDocumentWithTitle(pageData.id, pageData.title);
 
+    if (response.status === "error" || !response.data) {
+      // TODO: handle error state here.
+      console.log("An error occured while creating document with title");
+      return;
+    }
+
+    const { id, title, summary, content } = response.data;
+
+    setPageData({ id, title, summary, content, existingDoc: true });
+    return;
   };
 
   const getSelectionRange = () => {
