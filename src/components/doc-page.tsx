@@ -1,11 +1,18 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import ColorPicker from "./color-picker";
 import { getDocumentById } from "@/actions/get-document-by-id";
-import { updateDocumentTitle } from "@/actions/update-document";
-import { createDocumentWithTitle } from "@/actions/create-document";
+import {
+  updateDocumentContent,
+  updateDocumentTitle,
+} from "@/actions/update-document";
+import {
+  createDocumentWithContent,
+  createDocumentWithTitle,
+} from "@/actions/create-document";
+import { useDeboucne } from "@/hooks/use-debounce";
 
 type PageData = {
   id: string;
@@ -16,56 +23,23 @@ type PageData = {
 };
 
 type DocPageProps = {
-  id: string;
+  data: PageData;
 };
 
-const DocPage = ({ id }: DocPageProps) => {
-  const [pageData, setPageData] = useState<PageData>({
-    id,
-    title: "",
-    content: "",
-    summary: "",
-    existingDoc: false,
-  });
+const DocPage = ({ data }: DocPageProps) => {
+  const initalMount = useRef(true);
+
+  const [pageData, setPageData] = useState<PageData>(data);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const debouncedTitle = useDeboucne(pageData.title, 800);
+  const debouncedContent = useDeboucne(pageData.content, 1200);
+
   const [selectionRange, setSelectionRange] = useState<Range | null>(null);
   const [popoverPosition, setPopoverPosition] = useState<{
     top: number;
     left: number;
   } | null>(null);
-
-  const handleTitleChange = async (evt: ChangeEvent<HTMLInputElement>) => {
-    setPageData((pageData) => {
-      return { ...pageData, title: evt.target.value };
-    });
-
-    if (pageData.existingDoc) {
-      const response = await updateDocumentTitle(pageData.id, pageData.title);
-
-      if (response.status === "error" || !response.data) {
-        // TODO: handle error state here.
-        console.log("An error occured while updating the document title");
-        return;
-      }
-
-      const { id, title, summary, content } = response.data;
-
-      setPageData({ id, title, summary, content, existingDoc: true });
-      return;
-    }
-
-    const response = await createDocumentWithTitle(pageData.id, pageData.title);
-
-    if (response.status === "error" || !response.data) {
-      // TODO: handle error state here.
-      console.log("An error occured while creating document with title");
-      return;
-    }
-
-    const { id, title, summary, content } = response.data;
-
-    setPageData({ id, title, summary, content, existingDoc: true });
-    return;
-  };
 
   const getSelectionRange = () => {
     const currentSelection = window.getSelection();
@@ -131,24 +105,81 @@ const DocPage = ({ id }: DocPageProps) => {
   }, []);
 
   useEffect(() => {
-    const getDocData = async () => {
-      const response = await getDocumentById(id);
-
-      if (response.status === "error") {
-        // TODO: handle error state here
+    const handleTitleUpdate = async () => {
+      if (initalMount.current) {
+        initalMount.current = false;
+        return;
       }
 
-      if (!response.data) return;
+      if (pageData.existingDoc) {
+        const response = await updateDocumentTitle(pageData.id, debouncedTitle);
 
-      const { id: docId, title, summary, content } = response.data;
+        if (response.status === "error" || !response.data) {
+          // TODO: handle error state here.
+          console.log("An error occured while updating the document title");
+          return;
+        }
 
-      setPageData({ id: docId, title, summary, content, existingDoc: true });
+        return;
+      }
+
+      const response = await createDocumentWithTitle(
+        pageData.id,
+        debouncedTitle
+      );
+
+      if (response.status === "error" || !response.data) {
+        // TODO: handle error state here.
+        console.log("An error occured while creating document with title");
+        return;
+      }
+
+      setPageData((pageData) => ({ ...pageData, existingDoc: true }));
+      return;
     };
 
-    getDocData();
-  }, []);
+    handleTitleUpdate();
+  }, [debouncedTitle]);
 
-  console.log("Document Data", pageData);
+  useEffect(() => {
+    if (
+      contentRef.current &&
+      contentRef.current.innerText !== pageData.content
+    ) {
+      contentRef.current.innerText = pageData.content;
+    }
+  }, [pageData.content]);
+
+  useEffect(() => {
+    const handleContentUpdate = async () => {
+      if (pageData.existingDoc) {
+        const response = await updateDocumentContent(
+          pageData.id,
+          debouncedContent
+        );
+
+        if (response.status === "error" || !response.data) {
+          // TODO: handle error state here.
+          console.log("An error occured while updating the document content");
+          return;
+        }
+
+        return;
+      }
+      const response = await createDocumentWithContent(
+        pageData.id,
+        debouncedContent
+      );
+      if (response.status === "error" || !response.data) {
+        // TODO: handle error state here.
+        console.log("An error occured while updating the document content");
+        return;
+      }
+      setPageData((pageData) => ({ ...pageData, existingDoc: true }));
+    };
+
+    handleContentUpdate();
+  }, [debouncedContent]);
 
   return (
     <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-grow flex-col gap-8 p-10">
@@ -156,14 +187,24 @@ const DocPage = ({ id }: DocPageProps) => {
         id="title"
         type="text"
         value={pageData.title}
-        onChange={(evt) => handleTitleChange(evt)}
+        onChange={(evt) =>
+          setPageData((pageData) => ({ ...pageData, title: evt.target.value }))
+        }
         placeholder="What are you writing about?"
         className="min-h-12 h-12 outline-none font-semibold text-3xl text-black tracking-wide placeholder:font-geist placeholder:tracking-tight placeholder:text-gray-300"
       />
       <div
-        className="h-full flex-grow resize-none outline-none text-2xl font-semibold text-gray-800 bg-gray-100"
+        className="h-full flex-grow resize-none outline-none text-2xl text-black/70"
+        ref={contentRef}
         id="content"
         contentEditable
+        suppressContentEditableWarning
+        onInput={(evt) =>
+          setPageData((pageData) => ({
+            ...pageData,
+            content: (evt.target as HTMLDivElement).innerText,
+          }))
+        }
       ></div>
 
       <AnimatePresence>
@@ -180,3 +221,20 @@ const DocPage = ({ id }: DocPageProps) => {
 };
 
 export default DocPage;
+
+// const Component = ({ initalState }: { initalState: string }) => {
+//   const [title, setTitle] = useState(initalState);
+//   const debouncedTitle = useDeboucne(title, 800);
+
+//   useEffect(() => {
+//     // Do an api call here.
+//   }, [debouncedTitle]);
+
+//   return (
+//     <input
+//       value={title}
+//       onChange={(evt) => setTitle(evt.target.value)}
+//       type="text"
+//     />
+//   );
+// };

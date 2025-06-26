@@ -42,11 +42,11 @@ const DocsPage = async () => {
       ) : (
         <div className="flex justify-start items-center gap-5">
           {documents.map((document) => (
-            <Link key={document.id} href={document.id}>
+            <Link key={document.id} href={`/editor/${document.id}`}>
               <div className="w-40 h-52 bg-[#F2F2F2] flex flex-col gap-3 font-shadows p-4 rounded-xl hover:bg-white cursor-pointer transition-all duration-150 hover:translate-y-[-2px]">
                 <p className="text-[#5D5D5D] font-semibold">{document.title}</p>
                 <p className="text-sm text-[#868686]">
-                  {document.summary === "" ? <p className="font-geist tracking-tight font-medium">No Content</p> : document.summary}
+                  {document.summary === "" ? <span className="font-geist tracking-tight font-medium">No Content</span> : document.summary}
                 </p>
               </div>
             </Link>
