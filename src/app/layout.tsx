@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Shadows_Into_Light } from "next/font/google";
+import { Rubik, Shadows_Into_Light } from "next/font/google";
 import "./globals.css";
 
 const shadows = Shadows_Into_Light({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-shadows",
+});
+
+const rubik = Rubik({
+  subsets: ["latin"],
+  variable: "--font-rubik",
 });
 
 const geistSans = localFont({
@@ -34,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${shadows.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} ${shadows.variable} ${rubik.variable} antialiased overflow-x-hidden`}
       >
         {children}
       </body>

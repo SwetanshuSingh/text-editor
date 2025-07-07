@@ -14,7 +14,8 @@ const config: Config = {
       },
       fontFamily: {
         shadows: ["var(--font-shadows)"],
-        geist: ["var(--font-geist-sans)"]
+        geist: ["var(--font-geist-sans)"],
+        rubik: ["var(--font-rubik)"]
       },
     },
   },
