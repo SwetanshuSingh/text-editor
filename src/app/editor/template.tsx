@@ -9,7 +9,7 @@ const EditorTemplate = ({ children }: { children: React.ReactNode }) => {
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ type: "spring", damping: 15 }}
-        className="overflow-hidden"
+        className="bg-white overflow-hidden"
       >
         {children}
       </motion.main>
