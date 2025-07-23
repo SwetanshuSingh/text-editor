@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import ColorPicker from "./color-picker";
 import { getDocumentById } from "@/actions/get-document-by-id";
@@ -182,7 +182,10 @@ const DocPage = ({ data }: DocPageProps) => {
   }, [debouncedContent]);
 
   return (
-    <section className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-grow flex-col gap-8 p-10">
+    <motion.section
+      layout
+      className="max-w-[600px] w-[600px] h-full font-shadows font-medium text-xl bg-white outline outline-gray-100 shadow-sm flex flex-grow flex-col gap-8 p-10"
+    >
       <input
         id="title"
         type="text"
@@ -216,7 +219,7 @@ const DocPage = ({ data }: DocPageProps) => {
           />
         )}
       </AnimatePresence>
-    </section>
+    </motion.section>
   );
 };
 

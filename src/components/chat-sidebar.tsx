@@ -20,7 +20,7 @@ const ChatSidebar = ({ showChat }: ChatSidebarProps) => {
       <span className="px-3">
         <div className="p-4 border-t border-gray-200 w-full flex flex-col">
           <input
-            className="w-full outline-none text-sm font-medium placeholder:text-[#7A7A7A] tracking-tight"
+            className="w-full outline-none text-sm font-medium text-black/70 placeholder:text-[#7A7A7A] tracking-tight"
             type="text"
             placeholder="Ask pluto anything"
           />
