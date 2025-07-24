@@ -224,20 +224,3 @@ const DocPage = ({ data }: DocPageProps) => {
 };
 
 export default DocPage;
-
-// const Component = ({ initalState }: { initalState: string }) => {
-//   const [title, setTitle] = useState(initalState);
-//   const debouncedTitle = useDeboucne(title, 800);
-
-//   useEffect(() => {
-//     // Do an api call here.
-//   }, [debouncedTitle]);
-
-//   return (
-//     <input
-//       value={title}
-//       onChange={(evt) => setTitle(evt.target.value)}
-//       type="text"
-//     />
-//   );
-// };

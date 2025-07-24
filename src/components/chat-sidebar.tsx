@@ -10,7 +10,6 @@ const ChatSidebar = ({ showChat }: ChatSidebarProps) => {
   return (
     <motion.section
       layout
-      transition={{}}
       className={`h-full ${showChat ? "w-4/12 bg-white flex flex-col" : "w-0"}`}
     >
       <div className="flex-grow flex flex-col pt-5 pb-2 px-5 gap-6">
@@ -38,7 +37,7 @@ const ChatHeader = () => {
       <ChatIcon />
       <span className="h-3.5 w-[1.2px] bg-[#868686]"></span>
       <p className="text-sm font-medium text-[#868686] tracking-tight">
-        Introduction to AI Assistants
+        Untitled
       </p>
     </span>
   );
