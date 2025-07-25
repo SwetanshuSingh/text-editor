@@ -1,5 +1,6 @@
 import { getDocuments } from "@/actions/get-documents";
 import DocIcon from "@/components/ui/doc-icon";
+import NewDocIcon from "@/components/ui/new-doc-icon";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -25,9 +26,9 @@ const DocsPage = async () => {
         <form action={createNewDoc}>
           <button
             type="submit"
-            className="text-sm font-medium border border-gray-300 px-4 py-2 rounded-3xl hover:bg-gray-300 transition-colors duration-150"
+            className="flex items-start gap-1 text-sm text-[#7A7A7A] hover:text-[#1F1F1F] font-medium border border-gray-200 px-4 py-2 rounded-3xl hover:bg-[#F2F2F2] transition-colors duration-150"
           >
-            add
+            <NewDocIcon />
           </button>
         </form>
       </div>
@@ -46,7 +47,13 @@ const DocsPage = async () => {
               <div className="w-40 h-52 bg-[#F2F2F2] flex flex-col gap-3 font-shadows p-4 rounded-xl hover:bg-white cursor-pointer transition-all duration-150 hover:translate-y-[-2px]">
                 <p className="text-[#5D5D5D] font-semibold">{document.title}</p>
                 <p className="text-sm text-[#868686]">
-                  {document.summary === "" ? <span className="font-geist tracking-tight font-medium">No Content</span> : document.summary}
+                  {document.summary === "" ? (
+                    <span className="font-geist tracking-tight font-medium">
+                      No Content
+                    </span>
+                  ) : (
+                    document.summary
+                  )}
                 </p>
               </div>
             </Link>
